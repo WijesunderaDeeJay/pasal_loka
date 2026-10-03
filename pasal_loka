@@ -1,0 +1,436 @@
+මෙහෙම open වෙනවා.<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>පාසල් ලෝකය | Pasal Loka — School Supplies Store</title>
+<style>
+:root {
+  --kimi-color-text-primary: #171717;
+  --kimi-color-text-secondary: #525252;
+  --kimi-color-text-tertiary: #8a8a8a;
+  --kimi-color-text-quaternary: #b3b3b3;
+  --kimi-color-surface: #ffffff;
+  --kimi-color-surface-muted: #f5f5f5;
+  --kimi-color-surface-raised: #ffffff;
+  --kimi-color-surface-strong: #ebebeb;
+  --kimi-color-border: #e3e3e3;
+  --kimi-color-danger: #e5484d;
+  --kimi-color-positive: #2e9e5b;
+  --kimi-color-warning: #d9930d;
+  --kimi-color-accent: #2f6fed;
+  --kimi-chart-1: #2f6fed;
+  --kimi-chart-2: #e5484d;
+  --kimi-chart-3: #30a46c;
+  --kimi-chart-4: #8e4ec6;
+  --kimi-chart-5: #8f8f8f;
+  --kimi-font-sans: -apple-system, "Segoe UI", Roboto, "Noto Sans Sinhala", "Iskoola Pota", sans-serif;
+  --t-micro: 60ms; --t-fast: 120ms; --t-normal: 200ms; --t-slow: 300ms;
+  --ease-out: cubic-bezier(.2, 0, 0, 1);
+  --ease-in: cubic-bezier(.4, 0, 1, 1);
+  --ease-standard: cubic-bezier(.4, 0, .2, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --kimi-color-text-primary: #f2f2f2;
+    --kimi-color-text-secondary: #c4c4c4;
+    --kimi-color-text-tertiary: #8f8f8f;
+    --kimi-color-text-quaternary: #5c5c5c;
+    --kimi-color-surface: #161616;
+    --kimi-color-surface-muted: #212121;
+    --kimi-color-surface-raised: #1d1d1d;
+    --kimi-color-surface-strong: #2b2b2b;
+    --kimi-color-border: #2e2e2e;
+    --kimi-color-danger: #f2555a;
+    --kimi-color-positive: #3cb26b;
+    --kimi-color-warning: #e5a83b;
+    --kimi-color-accent: #4d8dff;
+    --kimi-chart-1: #4d8dff;
+    --kimi-chart-2: #f2555a;
+    --kimi-chart-3: #3cb26b;
+    --kimi-chart-4: #a06cd5;
+    --kimi-chart-5: #9a9a9a;
+  }
+}
+body { margin: 0; padding: 24px 16px; background: var(--kimi-color-surface); color: var(--kimi-color-text-primary); }
+</style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<div id="app" style="font-family: var(--kimi-font-sans); color: var(--kimi-color-text-primary); max-width: 860px; margin: 0 auto;">
+<style>
+#app button, #app input, #app textarea { font: inherit; }
+#app svg text { font-family: var(--kimi-font-sans); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+.chip { border: 1px solid var(--kimi-color-border); background: transparent; color: var(--kimi-color-text-secondary); border-radius: 999px; padding: 6px 12px; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all var(--t-fast) var(--ease-out); }
+.chip.on { background: var(--kimi-color-text-primary); color: var(--kimi-color-surface); border-color: var(--kimi-color-text-primary); }
+.card { border: 1px solid var(--kimi-color-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: border-color var(--t-fast) var(--ease-out); }
+.card:hover { border-color: var(--kimi-color-text-tertiary); }
+.pbtn { background: var(--kimi-color-text-primary); color: var(--kimi-color-surface); border: none; border-radius: 8px; padding: 8px 12px; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: opacity var(--t-fast) var(--ease-out); }
+.pbtn:hover { opacity: .82; } .pbtn:disabled { opacity: .35; cursor: not-allowed; }
+.sbtn { background: transparent; color: var(--kimi-color-text-primary); border: 1px solid var(--kimi-color-border); border-radius: 8px; padding: 8px 12px; font-size: 14px; font-weight: 500; cursor: pointer; }
+.sbtn:hover { background: var(--kimi-color-surface-muted); }
+.langbtn { border: 1px solid var(--kimi-color-border); background: transparent; color: var(--kimi-color-text-secondary); border-radius: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+.langbtn.on { background: var(--kimi-color-text-primary); color: var(--kimi-color-surface); border-color: var(--kimi-color-text-primary); }
+.step { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--kimi-color-border); background: transparent; color: var(--kimi-color-text-primary); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.step:hover { background: var(--kimi-color-surface-muted); }
+.inp { width: 100%; border: 1px solid var(--kimi-color-border); border-radius: 10px; padding: 9px 12px; font-size: 15px; background: transparent; color: var(--kimi-color-text-primary); outline: none; box-sizing: border-box; }
+.inp:focus { border-color: var(--kimi-color-text-primary); }
+.rrow .ractions { opacity: 0; transition: opacity var(--t-fast) var(--ease-out); }
+.rrow:hover .ractions, .rrow:focus-within .ractions { opacity: 1; }
+.radio { display: flex; align-items: center; gap: 8px; border: 1px solid var(--kimi-color-border); border-radius: 10px; padding: 10px 12px; cursor: pointer; font-size: 14px; }
+.radio.on { border-color: var(--kimi-color-text-primary); background: var(--kimi-color-surface-muted); }
+.radio input { accent-color: var(--kimi-color-text-primary); }
+.num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+@keyframes pop { 0% { transform: scale(.96); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.view { animation: pop var(--t-fast) var(--ease-out); }
+</style>
+
+<div style="display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+  <div>
+    <div style="font-size:20px; font-weight:500; letter-spacing:0;">පාසල් ලෝකය <span style="color:var(--kimi-color-text-quaternary); font-weight:400;">·</span> <span style="font-weight:400;">Pasal Loka</span></div>
+    <div id="tagline" style="font-size:13px; color:var(--kimi-color-text-tertiary); margin-top:2px;"></div>
+  </div>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <button class="langbtn" id="langSi" onclick="setLang('si')">සිංහල</button>
+    <button class="langbtn" id="langEn" onclick="setLang('en')">English</button>
+    <button class="pbtn" onclick="show('cart')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3.5 4.5h2l2.2 11.2a1.8 1.8 0 0 0 1.76 1.45h7.9a1.8 1.8 0 0 0 1.76-1.42L20.8 8.5H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10.4" cy="20.3" r="1.3" fill="currentColor"/><circle cx="17.2" cy="20.3" r="1.3" fill="currentColor"/></svg>
+      <span id="cartLabel">කරටස</span> <span id="cartCount" class="num" style="background:var(--kimi-color-surface); color:var(--kimi-color-text-primary); border-radius:999px; min-width:18px; height:18px; font-size:12px; display:inline-flex; align-items:center; justify-content:center; padding:0 4px;">0</span>
+    </button>
+  </div>
+</div>
+
+<div id="shopView" class="view">
+  <div style="position:relative; margin-bottom:12px;">
+    <span style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--kimi-color-text-tertiary);"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 3C16.1944 3 20 6.80558 20 11.5C20 13.523 19.2933 15.381 18.1132 16.8404L21.1364 19.8636C21.4879 20.2151 21.4879 20.7849 21.1364 21.1364C20.7849 21.4879 20.2151 21.4879 19.8636 21.1364L16.8404 18.1132C15.381 19.2933 13.523 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3ZM11.5 18.2C15.2003 18.2 18.2 15.2003 18.2 11.5C18.2 7.79969 15.2003 4.8 11.5 4.8C7.79969 4.8 4.8 7.79969 4.8 11.5C4.8 15.2003 7.79969 18.2 11.5 18.2Z"/></svg></span>
+    <input id="q" class="inp" style="padding-left:38px;" oninput="render()">
+  </div>
+  <div id="chips" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;"></div>
+  <div id="grid" class="grid"></div>
+  <div id="emptyShop" style="display:none; text-align:center; padding:48px 16px; color:var(--kimi-color-text-tertiary); font-size:14px;"></div>
+  <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:20px; padding-top:16px; border-top:1px solid var(--kimi-color-border); font-size:12px; color:var(--kimi-color-text-tertiary);">
+    <span style="display:inline-flex; align-items:center; gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7" cy="18.5" r="1.6" fill="currentColor"/><circle cx="17.5" cy="18.5" r="1.6" fill="currentColor"/></svg> <span id="foot1"></span></span>
+    <span style="display:inline-flex; align-items:center; gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 10.5h18" stroke="currentColor" stroke-width="1.8"/></svg> <span id="foot2"></span></span>
+    <span style="display:inline-flex; align-items:center; gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12.5l5 5L20 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> <span id="foot3"></span></span>
+  </div>
+</div>
+
+<div id="cartView" class="view" style="display:none;">
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+    <button class="sbtn" style="padding:6px;" onclick="show('shop')" title="Back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14.5 5.5L8 12l6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div id="cartTitle" style="font-size:17px; font-weight:500;"></div>
+  </div>
+  <div id="cartBody"></div>
+</div>
+
+<div id="doneView" class="view" style="display:none; text-align:center; padding:32px 16px;">
+  <div style="width:64px; height:64px; border-radius:999px; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; background: color-mix(in srgb, var(--kimi-color-positive) 14%, transparent); color: var(--kimi-color-positive);">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M19.3027 5.9053C19.6542 5.55397 20.2247 5.55388 20.5761 5.9053C20.9273 6.25675 20.9273 6.82734 20.5761 7.17874L9.65911 18.0948C9.30773 18.4461 8.73814 18.446 8.38665 18.0948L3.42376 13.1328C3.0726 12.7814 3.07263 12.2118 3.42376 11.8604C3.77524 11.509 4.34575 11.5089 4.6972 11.8604L9.02239 16.1856L19.3027 5.9053Z"/></svg>
+  </div>
+  <div id="doneTitle" style="font-size:20px; font-weight:500;"></div>
+  <div id="orderInfo" style="margin-top:12px; font-size:14px; color:var(--kimi-color-text-secondary); line-height:1.7;"></div>
+  <button class="pbtn" style="margin-top:20px;" onclick="resetAll()"><span id="backBtnLbl"></span></button>
+</div>
+
+<script>
+// ===================== Language =====================
+const I18N = {
+  si: {
+    tagline: 'සියලුම පාසල් උපකරණ — දිවයින පුරා ගෙදරටම බෙදාහැරීම',
+    cart: 'කරටස', search_ph: 'උපකරණ සොයන්න… (උදා: පෑන, බෑගය)',
+    empty_shop: 'සොයන භාණ්ඩය හමු නොවිණි. වෙනත් වචනයකින් උත්සාහ කරන්න.',
+    foot1: 'දිවයින පුරා බෙදාහැරීම', foot2: 'දොරටුපාර මුදල් / කාඩ්පත', foot3: 'රු. 5,000+ ඇණවුම්වලට බෙදාහැරීම නොමිලේ',
+    your_cart: 'ඔබේ කරටස', cart_empty: 'කරටස හිස්ය', cart_empty_sub: 'ඔබ තවම භාණ්ඩ එක් කර නැත.',
+    browse: 'භාණ්ඩ බලන්න', subtotal: 'උප එකතුව', delivery_fee: 'බෙදාහැරීමේ ගාස්තුව', free: 'නොමිලේ', total: 'මුළු එකතුව',
+    free_ok: 'බෙදාහැරීම නොමිලේ ලබා ගැනීමට සුදුසුයි!', free_more: 'නොමිලේ බෙදාහැරීමට තව {x} වටිනා භාණ්ඩ එක් කරන්න',
+    delivery_info: 'බෙදාහැරීමේ තොරතුරු', full_name: 'සම්පූර්ණ නම', phone: 'දුරකථන අංකය (07XXXXXXXX)', address: 'ලිපිනය',
+    home_delivery: 'ගෙදරට බෙදාහැරීම', pickup: 'වෙළඳසැලෙන් ගෙන යාම', cash: 'දොරටුපාර මුදල්', card: 'කාඩ්පතෙන්',
+    place_order: 'ඇණවුම තහවුරු කරන්න', sending: 'යවමින්…',
+    err_required: 'කරුණාකර සියලු තොරතුරු පුරවන්න.', err_phone: 'වලංගු දුරකථන අංකයක් ඇතුළත් කරන්න (උදා: 0771234567).',
+    err_send: 'ඇණවුම යැවීමට නොහැකි විය. internet connection එක පරීක්ෂා කර නැවත උත්සාහ කරන්න.',
+    done: 'ඇණවුම සාර්ථකව සිදු කළා!', order_no: 'ඇණවුම් අංකය', items_lbl: 'භාණ්ඩ', total_lbl: 'මුළු මුදල',
+    payment_lbl: 'ගෙවීමේ ක්‍රමය', delivery_lbl: 'බෙදාහැරීම', est: 'ඇස්තමේන්තු බෙදාහැරීමේ කාලය: 2–3 වැඩ දින',
+    pickup_note: 'ගෙන යාම: වෙළඳසැලෙන් (පැය 24ක් ඇතුළත)', back: 'වෙළඳසැලට නැවත යන්න',
+    add: 'කරටසට එක් කරන්න', added: 'එක් කළා', out: 'තොගය නැත', low: 'ඉතිරි {n}ක් පමණ', remove: 'ඉවත් කරන්න'
+  },
+  en: {
+    tagline: 'All school supplies — island-wide home delivery',
+    cart: 'Cart', search_ph: 'Search products… (e.g. pen, bag)',
+    empty_shop: 'No products found. Try a different word.',
+    foot1: 'Island-wide delivery', foot2: 'Cash on delivery / Card', foot3: 'Free delivery on orders over Rs. 5,000',
+    your_cart: 'Your cart', cart_empty: 'Your cart is empty', cart_empty_sub: "You haven't added any items yet.",
+    browse: 'Browse products', subtotal: 'Subtotal', delivery_fee: 'Delivery fee', free: 'Free', total: 'Total',
+    free_ok: 'You have unlocked free delivery!', free_more: 'Add {x} more for free delivery',
+    delivery_info: 'Delivery details', full_name: 'Full name', phone: 'Phone number (07XXXXXXXX)', address: 'Address',
+    home_delivery: 'Home delivery', pickup: 'Store pickup', cash: 'Cash on delivery', card: 'Card payment',
+    place_order: 'Place order', sending: 'Sending…',
+    err_required: 'Please fill in all fields.', err_phone: 'Enter a valid phone number (e.g. 0771234567).',
+    err_send: 'Could not send the order. Check your internet connection and try again.',
+    done: 'Order placed successfully!', order_no: 'Order number', items_lbl: 'items', total_lbl: 'Total',
+    payment_lbl: 'Payment method', delivery_lbl: 'Delivery', est: 'Estimated delivery: 2–3 business days',
+    pickup_note: 'Pickup: from store (within 24 hours)', back: 'Back to shop',
+    add: 'Add to cart', added: 'Added', out: 'Out of stock', low: 'Only {n} left', remove: 'Remove'
+  }
+};
+let LANG = localStorage.getItem('pl-lang') || 'si';
+const T = k => (I18N[LANG] && I18N[LANG][k]) || k;
+const fmt = n => (LANG === 'si' ? 'රු. ' : 'Rs. ') + n.toLocaleString('en-US');
+
+const CATS = [
+  { id: 'all', name: { si: 'සියල්ල', en: 'All' }, color: 'var(--kimi-color-text-tertiary)' },
+  { id: 'write', name: { si: 'ලිවීමේ උපකරණ', en: 'Writing' }, color: 'var(--kimi-chart-1)' },
+  { id: 'book', name: { si: 'පොත් සහ නෝට්පත්', en: 'Books & notes' }, color: 'var(--kimi-chart-3)' },
+  { id: 'bag', name: { si: 'බෑග් සහ පෙට්ටි', en: 'Bags & boxes' }, color: 'var(--kimi-chart-4)' },
+  { id: 'other', name: { si: 'වෙනත්', en: 'Other' }, color: 'var(--kimi-chart-5)' }
+];
+const ICONS = {
+  write: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none"><path d="M14.6 4.2l5.2 5.2L8.4 20.8l-5 1 1-5L14.6 4.2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12.8 6l5.2 5.2" stroke="currentColor" stroke-width="1.8"/></svg>',
+  book: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none"><rect x="5" y="3.5" width="14.5" height="17" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M9 3.5v17M12 8h4.5M12 12h4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  bag: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none"><rect x="5.5" y="7" width="13" height="13" rx="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M9 7V5.6A3 3 0 0 1 12 3.5a3 3 0 0 1 3 2.1V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="9.2" y="11.5" width="5.6" height="5.5" rx="1.4" stroke="currentColor" stroke-width="1.8"/></svg>',
+  other: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none"><rect x="9.6" y="3" width="4.8" height="3" rx="1" stroke="currentColor" stroke-width="1.8"/><path d="M10.6 6h2.8v2.2c1.6.8 2.6 2.4 2.6 4.3v5a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3v-5c0-1.9 1-3.5 2.6-4.3V6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 14h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
+};
+const P = [
+  { id: 1, name: { si: 'පළ පෑන 10ක් කටිලය', en: 'Ballpoint pens (pack of 10)' }, cat: 'write', price: 350, old: 420, stock: 25 },
+  { id: 2, name: { si: 'HB පැන්සල් 12ක්', en: 'HB pencils (12 pack)' }, cat: 'write', price: 280, stock: 40 },
+  { id: 3, name: { si: 'පින්සල් 12ක කටිලය', en: 'Colour pencils (12 pack)' }, cat: 'write', price: 620, old: 750, stock: 15 },
+  { id: 4, name: { si: 'ජ්යාමිති පෙට්ටිය', en: 'Geometry box' }, cat: 'write', price: 850, stock: 10 },
+  { id: 5, name: { si: 'පසුපස පොත 200 පිටු', en: 'Exercise book 200 pages' }, cat: 'book', price: 180, stock: 120 },
+  { id: 6, name: { si: 'A4 නෝට්පද කටිලය (5ක්)', en: 'A4 notebooks (pack of 5)' }, cat: 'book', price: 950, stock: 30 },
+  { id: 7, name: { si: 'සටහන් පොත් සැට් 10ක්', en: 'Notebooks (set of 10)' }, cat: 'book', price: 1450, old: 1650, stock: 12 },
+  { id: 8, name: { si: 'පාසල් බෑගය (3 දෙසැට්)', en: 'School bag (3 compartments)' }, cat: 'bag', price: 4500, stock: 8 },
+  { id: 9, name: { si: 'ආහාර පෙට්ටිය', en: 'Lunch box' }, cat: 'bag', price: 1500, stock: 0 },
+  { id: 10, name: { si: 'වතුර බෝතලය 750ml', en: 'Water bottle 750ml' }, cat: 'other', price: 1200, stock: 20 },
+  { id: 11, name: { si: 'රූලර + මකන + sharpener සැට්', en: 'Ruler + eraser + sharpener set' }, cat: 'other', price: 250, stock: 50 },
+  { id: 12, name: { si: 'වර්ණ පේන් සැට් 24ක්', en: 'Poster paint set (24 colours)' }, cat: 'other', price: 1850, old: 2100, stock: 6 }
+];
+const FREE_LIMIT = 5000, DELIVERY_FEE = 300;
+let activeCat = 'all', cart = {}, lastOrder = null;
+
+// ==== Supabase සැකසුම් (පියවර 5C: ඔබේ keys මෙතන දමන්න) ====
+const SUPABASE_URL = 'https://YOUR-PROJECT-REF.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiYOUR-ANON-PUBLIC-KEY';
+const SB_ENABLED = !SUPABASE_URL.includes('YOUR-PROJECT');
+const sb = SB_ENABLED ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+const catOf = id => CATS.find(c => c.id === id);
+
+function setLang(l) { LANG = l; localStorage.setItem('pl-lang', l); applyLang(); }
+
+function applyLang() {
+  document.getElementById('tagline').textContent = T('tagline');
+  document.getElementById('cartLabel').textContent = T('cart');
+  document.getElementById('q').placeholder = T('search_ph');
+  document.getElementById('emptyShop').textContent = T('empty_shop');
+  document.getElementById('foot1').textContent = T('foot1');
+  document.getElementById('foot2').textContent = T('foot2');
+  document.getElementById('foot3').textContent = T('foot3');
+  document.getElementById('cartTitle').textContent = T('your_cart');
+  document.getElementById('doneTitle').textContent = T('done');
+  document.getElementById('backBtnLbl').textContent = T('back');
+  document.getElementById('langSi').classList.toggle('on', LANG === 'si');
+  document.getElementById('langEn').classList.toggle('on', LANG === 'en');
+  renderChips(); render(); updateCount();
+  if (document.getElementById('cartView').style.display !== 'none') renderCart();
+  if (lastOrder) fillOrderInfo();
+}
+
+function renderChips() {
+  document.getElementById('chips').innerHTML = CATS.map(c =>
+    `<button class="chip ${activeCat === c.id ? 'on' : ''}" onclick="activeCat='${c.id}';renderChips();render()">
+      <span style="width:8px; height:8px; border-radius:999px; background:${c.color};"></span>${c.name[LANG]}
+    </button>`).join('');
+}
+
+function badgeFor(p) {
+  if (p.stock === 0) return `<span style="font-size:11px; padding:2px 8px; border-radius:6px; background: color-mix(in srgb, var(--kimi-color-danger) 12%, transparent); color: var(--kimi-color-danger);">${T('out')}</span>`;
+  if (p.stock <= 10) return `<span style="font-size:11px; padding:2px 8px; border-radius:6px; background: color-mix(in srgb, var(--kimi-color-warning) 14%, transparent); color: var(--kimi-color-warning);">${T('low').replace('{n}', p.stock)}</span>`;
+  return '';
+}
+
+function render() {
+  const q = (document.getElementById('q').value || '').trim();
+  const list = P.filter(p => (activeCat === 'all' || p.cat === activeCat) && (!q || p.name.si.toLowerCase().includes(q.toLowerCase()) || p.name.en.toLowerCase().includes(q.toLowerCase())));
+  document.getElementById('emptyShop').style.display = list.length ? 'none' : 'block';
+  document.getElementById('grid').innerHTML = list.map(p => {
+    const c = catOf(p.cat);
+    return `<div class="card">
+      <div style="height:92px; display:flex; align-items:center; justify-content:center; background: color-mix(in srgb, ${c.color} 10%, transparent); color:${c.color}; position:relative;">
+        ${ICONS[p.cat]}
+        ${p.stock === 0 ? `<span style="position:absolute; top:8px; right:8px;">${badgeFor(p)}</span>` : ''}
+      </div>
+      <div style="padding:12px; display:flex; flex-direction:column; gap:6px; flex:1;">
+        <div style="font-size:13px; color:var(--kimi-color-text-tertiary);">${c.name[LANG]}</div>
+        <div style="font-size:14px; font-weight:500; line-height:1.35;">${p.name[LANG]}</div>
+        <div style="display:flex; align-items:baseline; gap:8px; margin-top:auto;">
+          <span class="num" style="font-size:16px; font-weight:500;">${fmt(p.price)}</span>
+          ${p.old ? `<span class="num" style="font-size:12px; color:var(--kimi-color-text-quaternary); text-decoration:line-through;">${fmt(p.old)}</span>` : ''}
+        </div>
+        ${p.stock > 0 && p.stock <= 10 ? badgeFor(p) : ''}
+        <button class="pbtn" style="margin-top:4px;" ${p.stock === 0 ? 'disabled' : ''} onclick="add(${p.id}, this)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 6.09961C12.4971 6.09961 12.9004 6.50294 12.9004 7V11.0996H17C17.4971 11.0996 17.9004 11.5029 17.9004 12C17.9004 12.4971 17.4971 12.9004 17 12.9004H12.9004V17C12.9004 17.4971 12.4971 17.9004 12 17.9004C11.5029 17.9004 11.0996 17.4971 11.0996 17V12.9004H7C6.50294 12.9004 6.09961 12.4971 6.09961 12C6.09961 11.5029 6.50294 11.0996 7 11.0996H11.0996V7C11.0996 6.50294 11.5029 6.09961 12 6.09961Z"/></svg>
+          ${T('add')}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function add(id, btn) {
+  cart[id] = (cart[id] || 0) + 1;
+  updateCount();
+  if (btn) {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.3027 5.9053C19.6542 5.55397 20.2247 5.55388 20.5761 5.9053C20.9273 6.25675 20.9273 6.82734 20.5761 7.17874L9.65911 18.0948C9.30773 18.4461 8.73814 18.446 8.38665 18.0948L3.42376 13.1328C3.0726 12.7814 3.07263 12.2118 3.42376 11.8604C3.77524 11.509 4.34575 11.5089 4.6972 11.8604L9.02239 16.1856L19.3027 5.9053Z"/></svg> ' + T('added');
+    setTimeout(() => { btn.innerHTML = orig; }, 900);
+  }
+}
+
+function updateCount() {
+  document.getElementById('cartCount').textContent = Object.values(cart).reduce((a, b) => a + b, 0);
+}
+
+function chg(id, d) {
+  cart[id] = (cart[id] || 0) + d;
+  if (cart[id] <= 0) delete cart[id];
+  updateCount(); renderCart();
+}
+
+function totals() {
+  const sub = Object.entries(cart).reduce((s, [id, q]) => s + P.find(p => p.id == id).price * q, 0);
+  const delivery = sub === 0 || sub >= FREE_LIMIT ? 0 : DELIVERY_FEE;
+  return { sub, delivery, total: sub + delivery, count: Object.values(cart).reduce((a, b) => a + b, 0) };
+}
+
+function renderCart() {
+  const body = document.getElementById('cartBody');
+  const ids = Object.keys(cart);
+  if (!ids.length) {
+    body.innerHTML = `<div style="text-align:center; padding:48px 16px; border:1px dashed var(--kimi-color-border); border-radius:12px;">
+      <div style="font-size:15px; font-weight:500;">${T('cart_empty')}</div>
+      <div style="font-size:13px; color:var(--kimi-color-text-tertiary); margin:6px 0 16px;">${T('cart_empty_sub')}</div>
+      <button class="sbtn" onclick="show('shop')">${T('browse')}</button>
+    </div>`;
+    return;
+  }
+  const rows = ids.map(id => {
+    const p = P.find(x => x.id == id), q = cart[id], c = catOf(p.cat);
+    return `<div class="rrow" style="display:flex; align-items:center; gap:12px; padding:12px; border:1px solid var(--kimi-color-border); border-radius:12px; margin-bottom:8px;">
+      <div style="width:48px; height:48px; border-radius:8px; flex:none; display:flex; align-items:center; justify-content:center; background: color-mix(in srgb, ${c.color} 10%, transparent); color:${c.color};">${ICONS[p.cat].replace('width="44" height="44"', 'width="26" height="26"')}</div>
+      <div style="flex:1; min-width:0;">
+        <div style="font-size:14px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.name[LANG]}</div>
+        <div class="num" style="font-size:12px; color:var(--kimi-color-text-tertiary);">${fmt(p.price)} × ${q}</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <button class="step" onclick="chg(${id},-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17 11.0996C17.4971 11.0996 17.9004 11.5029 17.9004 12C17.9004 12.4971 17.4971 12.9004 17 12.9004H7C6.50294 12.9004 6.09961 12.4971 6.09961 12C6.09961 11.5029 6.50294 11.0996 7 11.0996H17Z"/></svg></button>
+        <span class="num" style="width:22px; text-align:center; font-size:14px;">${q}</span>
+        <button class="step" onclick="chg(${id},1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 6.09961C12.4971 6.09961 12.9004 6.50294 12.9004 7V11.0996H17C17.4971 11.0996 17.9004 11.5029 17.9004 12C17.9004 12.4971 17.4971 12.9004 17 12.9004H12.9004V17C12.9004 17.4971 12.4971 17.9004 12 17.9004C11.5029 17.9004 11.0996 17.4971 11.0996 17V12.9004H7C6.50294 12.9004 6.09961 12.4971 6.09961 12C6.09961 11.5029 6.50294 11.0996 7 11.0996H11.0996V7C11.0996 6.50294 11.5029 6.09961 12 6.09961Z"/></svg></button>
+      </div>
+      <div class="num" style="width:84px; text-align:right; font-size:14px; font-weight:500;">${fmt(p.price * q)}</div>
+      <button class="step ractions" title="${T('remove')}" onclick="delete cart[${id}];updateCount();renderCart();"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4.5 6.5h15M9.5 6.5V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v1.5M6.5 6.5l.8 12a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9l.8-12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>`;
+  }).join('');
+  const t = totals();
+  const pct = Math.min(100, Math.round(t.sub / FREE_LIMIT * 100));
+  body.innerHTML = rows + `
+  <div style="margin-top:16px; display:grid; grid-template-columns: 1fr; gap:16px;">
+    <div>
+      <div style="font-size:13px; color:var(--kimi-color-text-tertiary); margin-bottom:6px;">${t.sub >= FREE_LIMIT ? T('free_ok') : T('free_more').replace('{x}', fmt(FREE_LIMIT - t.sub))}</div>
+      <div style="height:4px; border-radius:999px; background:var(--kimi-color-text-quaternary); opacity:.3; overflow:hidden;"><div style="height:100%; width:${pct}%; background:var(--kimi-color-text-primary); border-radius:999px;"></div></div>
+      <div style="margin-top:16px; border:1px solid var(--kimi-color-border); border-radius:12px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; font-size:14px; color:var(--kimi-color-text-secondary); padding:4px 0;"><span>${T('subtotal')}</span><span class="num">${fmt(t.sub)}</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; color:var(--kimi-color-text-secondary); padding:4px 0;"><span>${T('delivery_fee')}</span><span class="num">${t.delivery === 0 ? T('free') : fmt(t.delivery)}</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:17px; font-weight:500; padding:8px 0 0; margin-top:6px; border-top:1px solid var(--kimi-color-border);"><span>${T('total')}</span><span class="num">${fmt(t.total)}</span></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:15px; font-weight:500; margin-bottom:12px;">${T('delivery_info')}</div>
+      <div style="display:grid; gap:10px;">
+        <input id="fName" class="inp" placeholder="${T('full_name')}">
+        <input id="fPhone" class="inp" placeholder="${T('phone')}" inputmode="numeric">
+        <textarea id="fAddr" class="inp" rows="2" placeholder="${T('address')}" style="resize:none;"></textarea>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <label class="radio on" id="rHome"><input type="radio" name="dlv" checked onchange="pickDlv('rHome')"> ${T('home_delivery')}</label>
+          <label class="radio" id="rPick"><input type="radio" name="dlv" onchange="pickDlv('rPick')"> ${T('pickup')}</label>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <label class="radio on" id="rCash"><input type="radio" name="pay" checked onchange="pickPay('rCash')"> ${T('cash')}</label>
+          <label class="radio" id="rCard"><input type="radio" name="pay" onchange="pickPay('rCard')"> ${T('card')}</label>
+        </div>
+        <div id="formErr" style="display:none; font-size:13px; color:var(--kimi-color-danger);"></div>
+        <button class="pbtn" style="padding:11px;" onclick="placeOrder(this)">${T('place_order')}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function pickDlv(id) { document.getElementById('rHome').classList.toggle('on', id === 'rHome'); document.getElementById('rPick').classList.toggle('on', id === 'rPick'); }
+function pickPay(id) { document.getElementById('rCash').classList.toggle('on', id === 'rCash'); document.getElementById('rCard').classList.toggle('on', id === 'rCard'); }
+
+function fillOrderInfo() {
+  const o = lastOrder;
+  document.getElementById('orderInfo').innerHTML =
+    `${T('order_no')}: <b style="font-weight:500;">${o.no}</b><br>` +
+    `${o.count} ${T('items_lbl')} · ${T('total_lbl')}: <span class="num">${fmt(o.total)}</span><br>` +
+    `${T('payment_lbl')}: ${T(o.payKey)}<br>` +
+    (o.dlv ? `${T('delivery_lbl')}: ${o.addr}<br>${T('est')}` : T('pickup_note'));
+}
+
+async function placeOrder(btn) {
+  const name = document.getElementById('fName').value.trim();
+  const phone = document.getElementById('fPhone').value.trim();
+  const addr = document.getElementById('fAddr').value.trim();
+  const err = document.getElementById('formErr');
+  let msg = '';
+  if (!name || !phone || !addr) msg = T('err_required');
+  else if (!/^07\d{8}$/.test(phone.replace(/\s/g, ''))) msg = T('err_phone');
+  if (msg) { err.textContent = msg; err.style.display = 'block'; return; }
+  const t = totals();
+  const no = 'SL-2026-' + String(Date.now()).slice(-6);
+  const dlv = document.getElementById('rHome').classList.contains('on');
+  const payKey = document.getElementById('rCash').classList.contains('on') ? 'cash' : 'card';
+  const items = Object.entries(cart).map(([id, q]) => {
+    const p = P.find(x => x.id == id);
+    return { name: p.name[LANG], qty: q, price: p.price };
+  });
+  const orderData = {
+    order_no: no, name: name, phone: phone, address: addr,
+    items: items, total: t.total, payment: payKey,
+    delivery_method: dlv ? 'home' : 'pickup', status: 'new'
+  };
+  btn.disabled = true;
+  btn.textContent = T('sending');
+  try {
+    if (SB_ENABLED) {
+      const { error } = await sb.from('orders').insert(orderData);
+      if (error) throw error;
+    } else {
+      console.warn('Supabase keys දමා නැත — order එක browser එකේ පමණයි.');
+    }
+    lastOrder = { no: no, count: t.count, total: t.total, payKey: payKey, dlv: dlv, addr: addr };
+    fillOrderInfo();
+    cart = {}; updateCount();
+    show('done');
+  } catch (e) {
+    err.textContent = T('err_send');
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = T('place_order');
+  }
+}
+
+function show(v) {
+  document.getElementById('shopView').style.display = v === 'shop' ? 'block' : 'none';
+  document.getElementById('cartView').style.display = v === 'cart' ? 'block' : 'none';
+  document.getElementById('doneView').style.display = v === 'done' ? 'block' : 'none';
+  if (v === 'cart') renderCart();
+}
+
+function resetAll() { show('shop'); render(); }
+
+applyLang();
+</script>
+</div>
+</body>
+</html>
